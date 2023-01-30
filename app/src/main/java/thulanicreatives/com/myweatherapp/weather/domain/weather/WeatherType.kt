@@ -1,4 +1,4 @@
-package thulanicreatives.com.myweatherapp.domain.weather
+package thulanicreatives.com.myweatherapp.weather.domain.weather
 
 import androidx.annotation.DrawableRes
 import thulanicreatives.com.myweatherapp.R

@@ -16,7 +16,6 @@ private data class IndexedWeatherData(
     val data: WeatherData
 )
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
     return time.mapIndexed { index, time ->
         val temperature = temperatures[index]
@@ -24,17 +23,21 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
         val windSpeed = windSpeeds[index]
         val pressure = pressures[index]
         val humidity = humidities[index]
-        IndexedWeatherData(
-            index = index,
-            data = WeatherData(
-                time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-                temperatureCelsius = temperature,
-                pressure = pressure,
-                windSpeed = windSpeed,
-                humidity = humidity,
-                weatherType = WeatherType.fromWMO(weatherCode)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            IndexedWeatherData(
+                index = index,
+                data = WeatherData(
+                    time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+                    temperatureCelsius = temperature,
+                    pressure = pressure,
+                    windSpeed = windSpeed,
+                    humidity = humidity,
+                    weatherType = WeatherType.fromWMO(weatherCode)
+                )
             )
-        )
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
     }.groupBy {
         it.index / 24
     }.mapValues {

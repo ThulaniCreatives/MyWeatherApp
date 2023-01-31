@@ -33,19 +33,6 @@ tools:context=".MainActivity">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <include
-        android:id="@+id/bottom_sheet_parent"
-        layout="@layout/item_bottom_sheet_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_bottom_sheet"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-    </include>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

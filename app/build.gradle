@@ -93,4 +93,6 @@ dependencies {
     implementation 'com.google.maps.android:maps-ktx:3.2.1'
     // (Optional) KTX for the Maps SDK for Android Utility Library
     implementation 'com.google.maps.android:maps-utils-ktx:3.2.1'
+    //shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }

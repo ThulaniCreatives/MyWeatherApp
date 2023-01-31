@@ -8,11 +8,11 @@ import kotlinx.coroutines.launch
 import thulanicreatives.com.myweatherapp.weather.data.location.DefaultLocationTracker
 import thulanicreatives.com.myweatherapp.weather.domain.repository.WeatherRepository
 import thulanicreatives.com.myweatherapp.weather.domain.utils.Resource
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-
     private val repository: WeatherRepository,
     private val locationTracker: DefaultLocationTracker
 ) : ViewModel() {
@@ -25,7 +25,7 @@ class WeatherViewModel @Inject constructor(
                 when (val result =
                     repository.getWeatherData(location.latitude, location.longitude)) {
                     is Resource.Success -> {
-                        Log.i("ViewModel", "${result.data}")
+                        Timber.i("ViewModel", "${result.data}")
                     }
                     is Resource.Error -> {
 
@@ -34,7 +34,5 @@ class WeatherViewModel @Inject constructor(
 
             }
         }
-
-
     }
 }

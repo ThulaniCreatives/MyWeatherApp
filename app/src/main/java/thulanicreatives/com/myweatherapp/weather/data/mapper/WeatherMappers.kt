@@ -10,6 +10,7 @@ import thulanicreatives.com.myweatherapp.weather.domain.weather.WeatherInfo
 import thulanicreatives.com.myweatherapp.weather.domain.weather.WeatherType
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 private data class IndexedWeatherData(
     val index: Int,
@@ -39,7 +40,7 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
             TODO("VERSION.SDK_INT < O")
         }
     }.groupBy {
-        it.index / 24
+        it.index
     }.mapValues {
         it.value.map { it.data }
     }

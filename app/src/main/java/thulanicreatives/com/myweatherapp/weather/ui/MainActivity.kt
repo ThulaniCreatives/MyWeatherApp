@@ -1,4 +1,4 @@
-package thulanicreatives.com.myweatherapp
+package thulanicreatives.com.myweatherapp.weather.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +21,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding =ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-
     }
 }

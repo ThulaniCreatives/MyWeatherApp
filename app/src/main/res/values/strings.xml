@@ -3,6 +3,8 @@
     <string name="nav_home">Home</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_Favourite">Favorite</string>
+    <string name="today">Today</string>
+    <string name="errorNetwork">There was a network error, please try again after a while</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

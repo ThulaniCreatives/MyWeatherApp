@@ -4,126 +4,172 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/background_bottom_sheet"
     android:layout_width="match_parent"
-    android:minHeight="200dp"
-    android:layout_marginStart="24dp"
+    android:layout_marginStart="@dimen/m24"
     android:layout_height="match_parent">
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constLayCardRoot1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@drawable/background_bottom_sheet"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="20dp">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constLayCardRoot"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bottom_sheet_background"
+            android:layout_margin="@dimen/m16"
+            app:cardCornerRadius="@dimen/m20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimFrameCardDesignBg"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:shimmer_auto_start="true">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constLayCardRoot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimFrameCardDesignBg"
+                    android:layout_width="@dimen/none"
+                    android:layout_height="@dimen/none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shimmer_auto_start="true">
+
+                    <ImageView
+                        android:id="@+id/imgvCardBg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.8"
+                        android:scaleType="centerCrop"
+                        />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <TextView
+                    android:id="@+id/txtDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/m16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.2"
+                    tools:text="Today" />
+
+                <TextView
+                    android:id="@+id/txtCurrentDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/m24"
+                    android:layout_marginEnd="@dimen/m16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Tues, 3 Aug" />
+
+                <TextView
+                    android:id="@+id/txtTemp"
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/m16"
+                    android:layout_marginTop="22dp"
+                    android:textAlignment="center"
+                    android:textSize="28sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtDate"
+                    tools:text="30" />
+
 
                 <ImageView
-                    android:id="@+id/imgvCardBg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0.8"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/background_bottom_sheet" />
+                    android:id="@+id/txtvCardExpiryDate"
+                    android:layout_width="@dimen/m24"
+                    android:layout_height="@dimen/m24"
+                    android:layout_marginTop="@dimen/m16"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:layout_constraintStart_toStartOf="@+id/txtTemp"
+                    app:layout_constraintTop_toBottomOf="@+id/txtTemp"
+                    tools:text="02/30" />
 
-            </com.facebook.shimmer.ShimmerFrameLayout>
+                <TextView
+                    android:id="@+id/txtLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/m8"
+                    android:text="11190 loveday srt JHB"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/txtvCardExpiryDate"
+                    app:layout_constraintTop_toBottomOf="@+id/txtvCardExpiryDate" />
 
-            <TextView
-                android:id="@+id/txtDate"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/txtWeatherType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/m16"
+                    android:layout_marginBottom="@dimen/m8"
+                    android:text="11190 loveday srt JHB"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/txtLocation" />
+
+                <ImageView
+                    android:id="@+id/imgWeatherType"
+                    android:layout_width="@dimen/m80"
+                    android:layout_height="@dimen/m80"
+                    android:src="@drawable/ic_cloudy"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.713"
+                    app:layout_constraintStart_toEndOf="@+id/txtTemp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.494"
+                    tools:text="123" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewForecast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bottom_sheet_background"
+            android:layout_margin="@dimen/m16"
+            app:cardCornerRadius="@dimen/m20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_forecast"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.2"
-                tools:text="Today" />
+                android:clipToPadding="false"
+                android:paddingBottom="?attr/actionBarSize"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_forecast" />
 
-            <TextView
-                android:id="@+id/txtCurrentDay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Tues, 3 Aug" />
+        </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/txtTemp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="28sp"
-                style="@style/TextAppearance.AppCompat.Headline"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="22dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtDate"
-                tools:text="30" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="153dp"
+            android:max="3"
+            android:progress="100"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-
-
-            <ImageView
-                android:id="@+id/txtvCardExpiryDate"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_cloudy"
-                app:layout_constraintStart_toStartOf="@+id/txtTemp"
-                app:layout_constraintTop_toBottomOf="@+id/txtTemp"
-                tools:text="02/30" />
-
-            <TextView
-                android:id="@+id/txtLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/txtvCardExpiryDate"
-                app:layout_constraintTop_toBottomOf="@+id/txtvCardExpiryDate"
-                android:text="11190 loveday srt JHB" />
-
-            <ImageView
-                android:id="@+id/imgWeatherType"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_cloudy"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.713"
-                app:layout_constraintStart_toEndOf="@+id/txtTemp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.494"
-                tools:text="123" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingBottom="?attr/actionBarSize"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

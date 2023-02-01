@@ -15,7 +15,7 @@ class ForecastWeatherViewHolder(val binding: ItemForecastBinding) :
         showLoadingWhileStale: Boolean
     ) {
         with(binding) {
-            txtTemp.text = transactionHistory.pressure.toString()
+            txtTemp.text = transactionHistory.temperatureCelsius.toString()
             txtTempDesc.text = transactionHistory.weatherType.weatherDesc
             txtWeekDay.text = convertDate(transactionHistory.time)
             imvTransactionIcon.setImageDrawable(binding.root.context.getDrawable(transactionHistory.weatherType.iconRes))

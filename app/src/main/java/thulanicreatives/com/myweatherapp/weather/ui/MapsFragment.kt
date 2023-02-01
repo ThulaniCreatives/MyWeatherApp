@@ -2,6 +2,7 @@ package thulanicreatives.com.myweatherapp.weather.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -38,6 +40,8 @@ import thulanicreatives.com.myweatherapp.databinding.FragmentMapsBinding
 import thulanicreatives.com.myweatherapp.weather.domain.utils.WeatherStateFlow
 import thulanicreatives.com.myweatherapp.weather.domain.weather.WeatherData
 import timber.log.Timber
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @AndroidEntryPoint
@@ -48,6 +52,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     private val viewModel: WeatherViewModel by viewModels()
     private lateinit var map: GoogleMap
+
+    private var manageState: WeatherStateFlow? = null
+
     private val locationState = MutableStateFlow<LatLng>(LatLng(latitude, longitude))
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -56,6 +63,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
         private var longitude: Double = 0.0
         const val MAP_ZOOM_LEVEL = 14f
         const val CITY_NOT_FOUND = "City Not Found"
+        const val firstElement = 0
     }
 
     override fun onCreateView(
@@ -79,7 +87,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
         val mBottomSheetBehaviour = BottomSheetBehavior.from(binding.bottomSheetParent.root)
         mBottomSheetBehaviour.isHideable = false
-        mBottomSheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
+        mBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         val tv = TypedValue()
         activity?.theme.let {
             if (activity?.theme!!.resolveAttribute(
@@ -97,13 +105,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
     private fun setUpObservers() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                //observeAccountDataState()
+                observeGetAccountDataResult()
             }
         }
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                observeGetAccountDataResult()
+                observeAccountDataState()
             }
         }
     }
@@ -111,18 +119,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
     private suspend fun observeAccountDataState() {
 
         viewModel.weatherDate.collectLatest { data ->
+           val todayData =  data.weatherDataPerDay.values.toList().first()
             with(binding.bottomSheetParent) {
                 binding.bottomSheetParent
                 txtDate.text = getString(R.string.today)
-                txtCurrentDay.text = "Sat, 3 Aug"
-                txtTemp.text = "${data.currentWeatherData?.temperatureCelsius}"
+                txtCurrentDay.text = ""
+                txtTemp.text = "${todayData[firstElement].temperatureCelsius}"
                 locationObservers()
-                Glide.with(imgWeatherType.context).load(R.drawable.ic_rainy).into(imgWeatherType)
+                Glide.with(imgWeatherType.context).load(todayData[firstElement].weatherType.iconRes).into(imgWeatherType)
             }
 
             showForecast(data.weatherDataPerDay)
 
         }
+    }
+
+    private fun convertDate(date: LocalDateTime): String {
+        val localDateTime = LocalDateTime.parse(date.toString())
+        val formatter = DateTimeFormatter.ofPattern("E")
+        return formatter.format(localDateTime)
     }
 
     private fun showForecast(forecastData: Map<Int, List<WeatherData>>) {
@@ -165,15 +180,26 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
     private suspend fun observeGetAccountDataResult() {
         viewModel.stateFlow.collectLatest { result ->
             when (result) {
-                is WeatherStateFlow.Error -> showError("Error")
-                is WeatherStateFlow.Loading -> showError("loading")
-                is WeatherStateFlow.Success -> observeAccountDataState()
+                is WeatherStateFlow.Error -> showError()
+                is WeatherStateFlow.Loading -> showLoading()
+
+                else -> {}
             }
         }
     }
 
-    private fun showError(status:String) {
-        Timber.d(status)
+    private fun showLoading() {
+        binding.bottomSheetParent.progressBar.isVisible = false
+    }
+
+    private fun showError() {
+        val builder = AlertDialog.Builder(activity)
+        with(builder)
+        {
+            setTitle("Network Connection")
+            setMessage(getString(R.string.errorNetwork))
+            show()
+        }
     }
 
     private fun getAddress(latitude: Double, longitude: Double): String {
@@ -185,7 +211,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
         if (addresses != null) {
             if (addresses.isNotEmpty()) {
-                address = addresses[0]
+                address = addresses[firstElement]
 
                 addressText = if(address.locality.isNullOrEmpty()) {
                     CITY_NOT_FOUND
@@ -245,6 +271,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
         } catch (e: SecurityException) {
             Timber.d("Exception: %s", e.message)
         }
+    }
+
+    private fun checkState(): String {
+        val city = when (manageState) {
+            WeatherStateFlow.Success -> {
+                getAddress(latitude, latitude)
+            }
+            else -> {
+                CITY_NOT_FOUND
+            }
+        }
+        return city
+
     }
 
     override fun onDestroyView() {

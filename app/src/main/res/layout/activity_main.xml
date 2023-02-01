@@ -32,16 +32,16 @@ tools:context=".weather.ui.MainActivity">
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    
+
 <com.google.android.material.bottomnavigation.BottomNavigationView
     android:id="@+id/bottom_navigation_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorContainerBackground"
     app:contentInsetEnd="@dimen/none"
     app:contentInsetStart="@dimen/none"
-    app:itemBackground="@color/colorPrimary"
+    app:itemBackground="@color/black"
     app:itemIconTint="@drawable/bottom_navigation_selector"
     app:itemRippleColor="@color/colorAccent"
     app:itemTextColor="@color/colorPrimaryText"

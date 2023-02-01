@@ -10,6 +10,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -55,6 +56,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
     private var manageState: WeatherStateFlow? = null
 
+    private lateinit var mBottomSheetBehaviour:BottomSheetBehavior<FrameLayout>
+
     private val locationState = MutableStateFlow<LatLng>(LatLng(latitude, longitude))
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -85,7 +88,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
         setUpObservers()
 
-        val mBottomSheetBehaviour = BottomSheetBehavior.from(binding.bottomSheetParent.root)
+        mBottomSheetBehaviour = BottomSheetBehavior.from(binding.bottomSheetParent.root)
         mBottomSheetBehaviour.isHideable = false
         mBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         val tv = TypedValue()
@@ -307,6 +310,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
         locationState.value = LatLng(location.latitude, location.longitude)
         //send new LatLong
         viewModel.getWeatherInfo(location.latitude, location.longitude)
+        mBottomSheetBehaviour.state = BottomSheetBehavior.STATE_HALF_EXPANDED
     }
 
 }

@@ -12,10 +12,6 @@ import thulanicreatives.com.myweatherapp.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
-
-    private lateinit var fusedLocationProviderClient:FusedLocationProviderClient
-    private var locationPermissionGranted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

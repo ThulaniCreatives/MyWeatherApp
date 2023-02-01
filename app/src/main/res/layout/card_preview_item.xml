@@ -7,7 +7,14 @@
     android:layout_marginStart="@dimen/m24"
     android:layout_height="match_parent">
 
-
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/main_landing_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+       >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constLayCardRoot1"
         android:layout_width="match_parent"
@@ -171,5 +178,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.core.widget.NestedScrollView>
 </FrameLayout>

@@ -24,7 +24,6 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
         val windSpeed = windSpeeds[index]
         val pressure = pressures[index]
         val humidity = humidities[index]
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             IndexedWeatherData(
                 index = index,
                 data = WeatherData(
@@ -36,17 +35,13 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
                     weatherType = WeatherType.fromWMO(weatherCode)
                 )
             )
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
+
     }.groupBy {
         it.index
     }.mapValues {
         it.value.map { it.data }
     }
 }
-
-@RequiresApi(Build.VERSION_CODES.O)
 fun WeatherDto.toWeatherInfo(): WeatherInfo {
     val weatherDataMap = weatherData.toWeatherDataMap()
     val now = LocalDateTime.now()

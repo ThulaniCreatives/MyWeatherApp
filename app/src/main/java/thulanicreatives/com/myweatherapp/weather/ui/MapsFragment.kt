@@ -3,16 +3,20 @@ package thulanicreatives.com.myweatherapp.weather.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -56,7 +60,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
     private var manageState: WeatherStateFlow? = null
 
-    private lateinit var mBottomSheetBehaviour:BottomSheetBehavior<FrameLayout>
+    private lateinit var mBottomSheetBehaviour: BottomSheetBehavior<FrameLayout>
 
     private val locationState = MutableStateFlow<LatLng>(LatLng(latitude, longitude))
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -122,14 +126,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
     private suspend fun observeAccountDataState() {
 
         viewModel.weatherDate.collectLatest { data ->
-           val todayData =  data.weatherDataPerDay.values.toList().first()
+            val todayData = data.weatherDataPerDay.values.toList().first()
             with(binding.bottomSheetParent) {
                 binding.bottomSheetParent
                 txtDate.text = getString(R.string.today)
                 txtCurrentDay.text = ""
                 txtTemp.text = "${todayData[firstElement].temperatureCelsius}"
                 locationObservers()
-                Glide.with(imgWeatherType.context).load(todayData[firstElement].weatherType.iconRes).into(imgWeatherType)
+                Glide.with(imgWeatherType.context).load(todayData[firstElement].weatherType.iconRes)
+                    .into(imgWeatherType)
             }
 
             showForecast(data.weatherDataPerDay)
@@ -148,7 +153,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
         var filteredList: MutableList<WeatherData> = mutableListOf()
 
         for (list in forecastData.values) {
-                filteredList.addAll(list)
+            filteredList.addAll(list)
         }
         with(binding.bottomSheetParent) {
             if (recyclerViewForecast.adapter == null) {
@@ -158,7 +163,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
                     adapter = ForecastWeatherAdapter(filteredList)
                 }
             } else {
-                val transactionHistoryAdapter = recyclerViewForecast.adapter as ForecastWeatherAdapter
+                val transactionHistoryAdapter =
+                    recyclerViewForecast.adapter as ForecastWeatherAdapter
                 transactionHistoryAdapter.onDataUpdate(filteredList)
             }
 
@@ -197,8 +203,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
     private fun showError() {
         val builder = AlertDialog.Builder(activity)
-        with(builder)
-        {
+        with(builder) {
             setTitle("Network Connection")
             setMessage(getString(R.string.errorNetwork))
             show()
@@ -212,18 +217,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
         val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
 
-        if (addresses != null) {
-            if (addresses.isNotEmpty()) {
-                address = addresses[firstElement]
-
-                addressText = if(address.locality.isNullOrEmpty()) {
-                    CITY_NOT_FOUND
-                } else {
-                    address.locality
-                }
+        if (addresses != null && addresses.isNotEmpty()) {
+            address = addresses[firstElement]
+            addressText = if (address.locality.isNullOrEmpty()) {
+                CITY_NOT_FOUND
             } else {
-                addressText = CITY_NOT_FOUND
+                address.locality
             }
+        } else {
+            addressText = CITY_NOT_FOUND
         }
         return addressText
     }
@@ -240,6 +242,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
             )
         )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                //show notification
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                Toast.makeText(requireContext(), "In development", Toast.LENGTH_SHORT).show()
+            } else {
+                permissionLauncher.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")

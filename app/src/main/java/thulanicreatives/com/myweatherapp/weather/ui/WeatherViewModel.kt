@@ -29,9 +29,6 @@ class WeatherViewModel @Inject constructor(
     private val locationTracker: DefaultLocationTracker
 ) : ViewModel() {
 
-
-
-
     // API Results
     private val _stateFlow = MutableSharedFlow<WeatherStateFlow>()
     val stateFlow = _stateFlow.asSharedFlow()
